@@ -5,18 +5,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pet.sample.ms_b.innerservice.Service;
+import com.pet.sample.ms_b.innerservice.HystrixService;
 
 @RestController
 @RequestMapping("/v1")
-public class FeignController {
-
+public class HystrixController {
+  
   @Autowired
-  Service service;
-
-  @GetMapping("/feign")
-  public String test() {
-    return service.test();
+  HystrixService hystrixservice;
+  
+  @GetMapping("/hystrix")
+  public String test_hystrix() {
+    return hystrixservice.comsumer();
   }
   
 }
