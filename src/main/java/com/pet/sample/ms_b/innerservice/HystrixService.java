@@ -1,30 +1,19 @@
 package com.pet.sample.ms_b.innerservice;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+@FeignClient(name = "ms-a", fallback = HystrixFallBack.class)
+public interface HystrixService {
+	@GetMapping("/v1/info/getName")
+	public String getName();
+}
 
-@Service
-public class HystrixService {
-
-	@Autowired
-	RestTemplate restTemplate;
-
-	@HystrixCommand(fallbackMethod = "fallback")
-	public String comsumer() {
-		try {
-			Thread.sleep(5000l);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		String result = restTemplate.getForObject("http://ms-a/v1/info/getName", String.class);
-		System.out.println("result >>>>>> " + result);
-		return result;
-	}
-
-	public String fallback() {
-		return "fallback";
+@Component
+class HystrixFallBack implements HystrixService{
+	@Override
+	public String getName() {
+		return "feign fallback";
 	}
 }

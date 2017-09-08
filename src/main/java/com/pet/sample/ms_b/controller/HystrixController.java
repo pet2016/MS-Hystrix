@@ -16,7 +16,7 @@ public class HystrixController {
   
   @GetMapping("/hystrix")
   public String test_hystrix() {
-    return hystrixservice.comsumer();
+    return hystrixservice.getName();
   }
   
 }
